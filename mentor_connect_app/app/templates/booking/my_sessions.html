@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}My Sessions | MentorConnect{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">My Sessions</h2>
+    
+    {% if sessions %}
+        <div class="row">
+            {% for session in sessions %}
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    {% if current_user.role == 'mentee' %}
+                                        <img src="{{ url_for('static', filename='images/' + session.mentor.profile_image) if session.mentor.profile_image else 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}" 
+                                             class="rounded-circle me-3" width="50" height="50" alt="{{ session.mentor.username }}">
+                                        <div>
+                                            <h5 class="mb-0">{{ session.mentor.first_name }} {{ session.mentor.last_name }}</h5>
+                                            <p class="text-muted mb-0">{{ session.mentor.title }}</p>
+                                        </div>
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='images/' + session.mentee.profile_image) if session.mentee.profile_image else 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}" 
+                                             class="rounded-circle me-3" width="50" height="50" alt="{{ session.mentee.username }}">
+                                        <div>
+                                            <h5 class="mb-0">{{ session.mentee.first_name }} {{ session.mentee.last_name }}</h5>
+                                            <p class="text-muted mb-0">Mentee</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <span class="badge {% if session.status == 'approved' %}bg-success{% elif session.status == 'requested' %}bg-warning{% elif session.status == 'rejected' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                    {{ session.status|title }}
+                                </span>
+                            </div>
+                            
+                            {% if session.notes %}
+                                <div class="mb-3">
+                                    <h6>Message:</h6>
+                                    <p class="mb-0">{{ session.notes }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="text-muted small mb-3">
+                                Requested on {{ session.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                            </div>
+                            
+                            {% if current_user.role == 'mentor' and session.status == 'requested' %}
+                                <div class="d-flex gap-2">
+                                    <form action="{{ url_for('booking.approve_appointment', session_id=session.id) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                    </form>
+                                    <form action="{{ url_for('booking.reject_appointment', session_id=session.id) }}" method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <p class="text-muted">No sessions found.</p>
+            {% if current_user.role == 'mentee' %}
+                <a href="{{ url_for('main.mentors') }}" class="btn btn-primary">Find a Mentor</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

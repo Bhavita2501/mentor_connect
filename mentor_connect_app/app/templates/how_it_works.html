@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}How It Works | MentorConnect{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="fw-bold mb-3">How MentorConnect Works</h1>
+            <p class="lead text-muted">Get started with your mentorship journey in three simple steps</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                        <i class="fas fa-search fa-2x text-primary"></i>
+                    </div>
+                    <h4>1. Find Your Mentor</h4>
+                    <p class="text-muted">Browse through our curated list of experienced mentors. Filter by expertise, rate, and availability to find the perfect match.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                        <i class="fas fa-calendar-check fa-2x text-primary"></i>
+                    </div>
+                    <h4>2. Book a Session</h4>
+                    <p class="text-muted">Choose a convenient time slot and book a 30-minute session. Each session costs just $20, payable securely through our platform.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                        <i class="fas fa-video fa-2x text-primary"></i>
+                    </div>
+                    <h4>3. Connect and Learn</h4>
+                    <p class="text-muted">Join your mentor in a private video call. Get personalized guidance, feedback, and insights to help you grow.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <h2 class="fw-bold mb-4">For Mentees</h2>
+            <div class="d-flex mb-4">
+                <div class="me-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">1</div>
+                </div>
+                <div>
+                    <h5>Create Your Account</h5>
+                    <p class="text-muted">Sign up as a mentee and complete your profile to get started.</p>
+                </div>
+            </div>
+            <div class="d-flex mb-4">
+                <div class="me-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">2</div>
+                </div>
+                <div>
+                    <h5>Explore Mentors</h5>
+                    <p class="text-muted">Browse mentor profiles and find someone who matches your needs.</p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="me-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">3</div>
+                </div>
+                <div>
+                    <h5>Book and Connect</h5>
+                    <p class="text-muted">Schedule a session and meet your mentor via video call.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <img src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 class="img-fluid rounded-3 shadow" alt="Mentee learning">
+        </div>
+    </div>
+
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6 order-lg-2">
+            <h2 class="fw-bold mb-4">For Mentors</h2>
+            <div class="d-flex mb-4">
+                <div class="me-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">1</div>
+                </div>
+                <div>
+                    <h5>Join as a Mentor</h5>
+                    <p class="text-muted">Create your mentor account and showcase your expertise.</p>
+                </div>
+            </div>
+            <div class="d-flex mb-4">
+                <div class="me-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">2</div>
+                </div>
+                <div>
+                    <h5>Set Your Schedule</h5>
+                    <p class="text-muted">Define your availability and set your hourly rate.</p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="me-3">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">3</div>
+                </div>
+                <div>
+                    <h5>Start Mentoring</h5>
+                    <p class="text-muted">Accept booking requests and help others grow while earning.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 order-lg-1">
+            <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 class="img-fluid rounded-3 shadow" alt="Mentor teaching">
+        </div>
+    </div>
+
+    <div class="text-center py-5">
+        <h2 class="fw-bold mb-4">Ready to Get Started?</h2>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Sign Up Now</a>
+            <a href="{{ url_for('main.mentors') }}" class="btn btn-outline-primary btn-lg">Browse Mentors</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

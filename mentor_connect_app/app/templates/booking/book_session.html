@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Book a Session with {{ mentor.first_name }} | MentorConnect{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h3 class="card-title mb-4">Book a Session with {{ mentor.first_name }}</h3>
+                
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    {{ form.mentor_id }}
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="mb-3">
+                                {{ form.date.label(class="form-label") }}
+                                {% if form.date.errors %}
+                                    {{ form.date(class="form-control is-invalid", id="date-picker") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.date.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.date(class="form-control", id="date-picker") }}
+                                {% endif %}
+                                <div class="form-text">Choose a date for your session</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.time.label(class="form-label") }}
+                                {% if form.time.errors %}
+                                    {{ form.time(class="form-select is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.time.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.time(class="form-select") }}
+                                {% endif %}
+                                <div class="form-text">All times are in your local timezone</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.notes.label(class="form-label") }}
+                        {{ form.notes(class="form-control", rows=4) }}
+                        <div class="form-text">Let {{ mentor.first_name }} know what you'd like to discuss</div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="fas fa-info-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h6 class="alert-heading">Session Information</h6>
+                                <p class="mb-0">This booking is for a <strong>30-minute session</strong> with {{ mentor.first_name }} for <strong>${{ mentor.hourly_rate|int // 2 if mentor.hourly_rate else 20 }}</strong>. You'll be able to connect via video call at the scheduled time.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm sticky-lg-top" style="top: 2rem;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <img src="{{ url_for('static', filename='images/' + mentor.profile_image) if mentor.profile_image else 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}" 
+                         class="rounded-circle me-3" width="60" height="60" alt="{{ mentor.username }}">
+                    <div>
+                        <h5 class="card-title mb-0">{{ mentor.first_name }} {{ mentor.last_name }}</h5>
+                        <p class="text-muted mb-0">{{ mentor.title }}</p>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h6>Session Summary</h6>
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Duration:</span>
+                            <span>30 minutes</span>
+                        </li>
+                        <li class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Rate:</span>
+                            <span>${{ mentor.hourly_rate|int // 2 if mentor.hourly_rate else 20 }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Platform:</span>
+                            <span>Video Call</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h6>What to Expect</h6>
+                    <p class="small">After booking, you'll receive confirmation details. At the scheduled time, you'll be able to join a private video call with {{ mentor.first_name }} to discuss your questions and get personalized guidance.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize date picker
+        flatpickr("#date-picker", {
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            disable: [
+                function(date) {
+                    // Disable weekends
+                    return (date.getDay() === 0 || date.getDay() === 6);
+                }
+            ]
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}MentorConnect - Connect with Expert Mentors{% endblock %}
+
+{% block content %}
+<section class="hero py-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-4">Find Your Perfect <span class="text-primary">Mentor</span></h1>
+            <p class="lead mb-4">Connect with industry professionals for personalized 1:1 mentoring sessions. Get guidance, feedback, and advice to accelerate your career.</p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{{ url_for('main.mentors') }}" class="btn btn-primary btn-lg">Find a Mentor</a>
+                <a href="{{ url_for('main.how_it_works') }}" class="btn btn-outline-secondary btn-lg">How It Works</a>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-5 mt-lg-0">
+            <img src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                 class="img-fluid rounded-3 shadow" alt="Mentoring session">
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">How It Works</h2>
+        <p class="lead text-muted">Simple, transparent, and effective mentorship</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                        <i class="fas fa-search fa-2x text-primary"></i>
+                    </div>
+                    <h4>Find Your Mentor</h4>
+                    <p class="text-muted">Browse profiles of experienced professionals and find the perfect match for your needs.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                        <i class="fas fa-calendar-check fa-2x text-primary"></i>
+                    </div>
+                    <h4>Book a Session</h4>
+                    <p class="text-muted">Select a convenient time slot and book a 30-minute session for just $20.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                        <i class="fas fa-video fa-2x text-primary"></i>
+                    </div>
+                    <h4>Connect and Learn</h4>
+                    <p class="text-muted">Meet your mentor via video call and get personalized guidance to help you grow.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Featured Mentors</h2>
+        <p class="lead text-muted">Learn from the best in the industry</p>
+    </div>
+    
+    <div class="row g-4">
+        {% for mentor in featured_mentors %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm mentor-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ url_for('static', filename='images/' + mentor.profile_image) if mentor.profile_image else 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}" 
+                             class="rounded-circle me-3" width="60" height="60" alt="{{ mentor.username }}">
+                        <div>
+                            <h5 class="card-title mb-0">{{ mentor.first_name }} {{ mentor.last_name }}</h5>
+                            <p class="text-muted mb-0">{{ mentor.title }}</p>
+                        </div>
+                    </div>
+                    <p class="card-text text-truncate-3">{{ mentor.bio|default('Professional mentor with expertise in various areas.', true) }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <span class="badge bg-primary">${{ mentor.hourly_rate|default(40, true)|int }}</span>
+                            <span class="text-muted small">per hour</span>
+                        </div>
+                        <a href="{{ url_for('profile.view_mentor', mentor_id=mentor.id) }}" class="btn btn-sm btn-outline-primary">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{{ url_for('main.mentors') }}" class="btn btn-primary">View All Mentors</a>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">What Our Users Say</h2>
+        <p class="lead text-muted">Real feedback from mentees and mentors</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-3 text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="fst-italic mb-3">"Working with my mentor has been transformative. Their guidance helped me navigate complex career decisions and develop skills I didn't know I needed."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                             class="rounded-circle me-3" width="50" height="50" alt="Testimonial">
+                        <div>
+                            <h6 class="mb-0">Sarah Johnson</h6>
+                            <small class="text-muted">Product Designer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-3 text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="fst-italic mb-3">"As a mentor, I've found incredible satisfaction in helping others grow. The platform makes it easy to connect with motivated individuals who are eager to learn."</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                             class="rounded-circle me-3" width="50" height="50" alt="Testimonial">
+                        <div>
+                            <h6 class="mb-0">David Chen</h6>
+                            <small class="text-muted">Senior Developer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="mb-3 text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p class="fst-italic mb-3">"I was stuck in my career and didn't know which direction to take. My mentor provided practical advice that helped me secure a promotion within three months!"</p>
+                    <div class="d-flex align-items-center">
+                        <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                             class="rounded-circle me-3" width="50" height="50" alt="Testimonial">
+                        <div>
+                            <h6 class="mb-0">Emily Rodriguez</h6>
+                            <small class="text-muted">Marketing Manager</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-4">Ready to accelerate your growth?</h2>
+        <p class="lead mb-4">Join thousands of professionals who are learning from industry experts.</p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4">Get Started Today</a>
+    </div>
+</section>
+{% endblock %}

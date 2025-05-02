@@ -1,0 +1,16 @@
+{
+  "name": "mentor-connect",
+  "private": true,
+  "scripts": {
+    "start": "python run.py",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "stripe": "^12.0.0"
+  },
+  "devDependencies": {
+    "Flask-OAuthlib": "^0.9.6",
+    "oauthlib": "^3.2.2",
+    "requests": "^2.31.0"
+  }
+}

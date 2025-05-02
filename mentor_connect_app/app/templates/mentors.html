@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Find Mentors | MentorConnect{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="fw-bold mb-3">Find Your Perfect Mentor</h1>
+            <p class="lead text-muted">Connect with experienced professionals who can help you achieve your goals.</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+            <form method="GET" class="d-flex gap-2">
+                <input type="number" class="form-control" placeholder="Min Rate" name="min_rate" value="{{ request.args.get('min_rate', '') }}">
+                <input type="number" class="form-control" placeholder="Max Rate" name="max_rate" value="{{ request.args.get('max_rate', '') }}">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for mentor in mentors.items %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm mentor-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ url_for('static', filename='images/' + mentor.profile_image) if mentor.profile_image else 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}" 
+                             class="rounded-circle me-3" width="60" height="60" alt="{{ mentor.username }}">
+                        <div>
+                            <h5 class="card-title mb-0">{{ mentor.first_name }} {{ mentor.last_name }}</h5>
+                            <p class="text-muted mb-0">{{ mentor.title }}</p>
+                        </div>
+                    </div>
+                    
+                    <p class="card-text text-truncate-3">{{ mentor.bio }}</p>
+                    
+                    <div class="mb-3">
+                        {% for skill in mentor.skills[:3] %}
+                            <span class="badge bg-light text-dark me-1">{{ skill.name }}</span>
+                        {% endfor %}
+                        {% if mentor.skills|length > 3 %}
+                            <span class="badge bg-light text-dark">+{{ mentor.skills|length - 3 }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-primary">${{ mentor.hourly_rate|int }}</span>
+                            <span class="text-muted small">per hour</span>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-primary request-appointment" data-mentor-id="{{ mentor.id }}">
+                                Request Appointment
+                            </button>
+                            <a href="{{ url_for('profile.view_mentor', mentor_id=mentor.id) }}" class="btn btn-sm btn-outline-secondary">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if mentors.pages > 1 %}
+    <nav class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% for page in range(1, mentors.pages + 1) %}
+            <li class="page-item {% if page == mentors.page %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('main.mentors', page=page, min_rate=request.args.get('min_rate'), max_rate=request.args.get('max_rate')) }}">{{ page }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<!-- Appointment Request Modal -->
+<div class="modal fade" id="appointmentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Request Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="appointmentForm">
+                    <input type="hidden" id="mentorId" name="mentor_id">
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message to Mentor</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitAppointment">Submit Request</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = new bootstrap.Modal(document.getElementById('appointmentModal'));
+    
+    // Handle appointment request button clicks
+    document.querySelectorAll('.request-appointment').forEach(button => {
+        button.addEventListener('click', function() {
+            document.getElementById('mentorId').value = this.dataset.mentorId;
+            modal.show();
+        });
+    });
+    
+    // Handle form submission
+    document.getElementById('submitAppointment').addEventListener('click', async function() {
+        const form = document.getElementById('appointmentForm');
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch('/request-appointment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    mentor_id: formData.get('mentor_id'),
+                    message: formData.get('message')
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok) {
+                modal.hide();
+                alert('Appointment request sent successfully!');
+                form.reset();
+            } else {
+                alert(result.error || 'Failed to send appointment request');
+            }
+        } catch (error) {
+            alert('An error occurred. Please try again.');
+        }
+    });
+});
+</script>
+{% endblock %}

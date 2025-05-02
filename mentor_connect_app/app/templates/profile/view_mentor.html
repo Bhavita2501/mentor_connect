@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}{{ mentor.first_name }} {{ mentor.last_name }} | MentorConnect{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <img src="{{ url_for('static', filename='images/' + mentor.profile_image) if mentor.profile_image else 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}" 
+                     class="rounded-circle mb-3" width="120" height="120" alt="{{ mentor.username }}">
+                
+                <h4 class="card-title">{{ mentor.first_name }} {{ mentor.last_name }}</h4>
+                <p class="text-muted">{{ mentor.title }}</p>
+                
+                <div class="badge bg-primary mb-3">${{ mentor.hourly_rate|int }} per hour</div>
+                
+                <div class="d-grid mt-3">
+                    <a href="{{ url_for('booking.book_session', mentor_id=mentor.id) }}" class="btn btn-primary">Book a Session</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h5 class="card-title border-bottom pb-2">About {{ mentor.first_name }}</h5>
+                <p>{{ mentor.bio }}</p>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h5 class="card-title border-bottom pb-2">Professional Info</h5>
+                
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-briefcase text-primary me-2"></i>
+                            <div>
+                                <div class="small text-muted">Company</div>
+                                <div>{{ mentor.company if mentor.company else 'Not specified' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-graduation-cap text-primary me-2"></i>
+                            <div>
+                                <div class="small text-muted">Experience</div>
+                                <div>{{ mentor.experience_years if mentor.experience_years else '0' }} years</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-dollar-sign text-primary me-2"></i>
+                            <div>
+                                <div class="small text-muted">Session Rate</div>
+                                <div>$20 for 30 minutes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6>Skills & Expertise</h6>
+                <div class="mb-3">
+                    {% if mentor.skills %}
+                        {% for skill in mentor.skills %}
+                            <span class="badge bg-light text-dark me-2 mb-2 py-2 px-3">{{ skill.name }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No skills specified</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Reviews</h5>
+                    <span class="badge bg-primary">{{ mentor.reviews_received|length }}</span>
+                </div>
+                
+                {% if mentor.reviews_received %}
+                    {% for review in mentor.reviews_received %}
+                        <div class="{% if not loop.last %}border-bottom pb-3 mb-3{% endif %}">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ url_for('static', filename='images/' + review.author.profile_image) if review.author.profile_image else 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}" 
+                                         class="rounded-circle me-2" width="40" height="40" alt="{{ review.author.username }}">
+                                    <div>
+                                        <div>{{ review.author.first_name }} {{ review.author.last_name }}</div>
+                                        <small class="text-muted">{{ review.created_at.strftime('%B %d, %Y') }}</small>
+                                    </div>
+                                </div>
+                                <div class="text-warning">
+                                    {% for i in range(review.rating) %}
+                                        <i class="fas fa-star"></i>
+                                    {% endfor %}
+                                    {% for i in range(5 - review.rating) %}
+                                        <i class="far fa-star"></i>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <p class="mb-0">{{ review.comment }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No reviews yet. Be the first to book a session with {{ mentor.first_name }}!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

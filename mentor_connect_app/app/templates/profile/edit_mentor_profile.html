@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Mentor Profile | MentorConnect{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-5">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="text-center mb-4">Edit Mentor Profile</h2>
+                
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {% if form.title.errors %}
+                            {{ form.title(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.title(class="form-control") }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.company.label(class="form-label") }}
+                        {% if form.company.errors %}
+                            {{ form.company(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.company.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.company(class="form-control") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.location.label(class="form-label") }}
+                        {% if form.location.errors %}
+                            {{ form.location(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.location.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.location(class="form-select") }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.experience_years.label(class="form-label") }}
+                        {% if form.experience_years.errors %}
+                            {{ form.experience_years(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.experience_years.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.experience_years(class="form-control") }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.hourly_rate.label(class="form-label") }}
+                        {% if form.hourly_rate.errors %}
+                            {{ form.hourly_rate(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.hourly_rate.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.hourly_rate(class="form-control") }}
+                        {% endif %}
+                        <div class="form-text">Minimum rate is $20 per 30 minutes</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.skills.label(class="form-label") }}
+                        {% if form.skills.errors %}
+                            {{ form.skills(class="form-control is-invalid", rows=3) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.skills.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.skills(class="form-control", rows=3) }}
+                        {% endif %}
+                        <div class="form-text">{{ form.skills.description }}</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.bio.label(class="form-label") }}
+                        {% if form.bio.errors %}
+                            {{ form.bio(class="form-control is-invalid", rows=4) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.bio.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.bio(class="form-control", rows=4) }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.profile_image.label(class="form-label") }}
+                        {{ form.profile_image(class="form-control") }}
+                        {% if form.profile_image.errors %}
+                            {% for error in form.profile_image.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="form-text">Supported formats: JPG, PNG, JPEG</div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
